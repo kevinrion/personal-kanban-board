@@ -13,22 +13,21 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 # Tech stack
 
 ## Core
-- react
-- next
-- vite
+- [x] react
+- [x] next
 
 ## UI
-- Shadcn UI
-- Tailwind
-- Motion (Formerly Framer Motion)
+- [] Shadcn UI
+- [] Tailwind
+- [] Motion (Formerly Framer Motion)
 
 ## State
-- Zustand
-- Tanstack
+- [] Zustand
+- [] Tanstack
 
 ## Testing
-- vitest
-- Playwright
+- [] vitest
+- [] Playwright
 
 ---
 
@@ -44,4 +43,15 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 # Project history
 - June 18th
     - DONE - decide on tech stack.
-    - initialise react core of the project.
+    - DONE - update macos, homebrew, xcode, docker.
+    - DONE - initialise react core of the project (Vite scaffold, since migrated)
+    - DONE - migrate to Next.js (App Router, TypeScript, src/app/)
+    - DONE (manual) create a sub page
+    - DONE (ai) create a button to move between pages
+    - DONE (ai) create a global breadcrumb component
+
+---
+
+# Gotchas and tips
+- when scaffolding into an existing folder, use `.` as the project name
+    - `npx create-next-app@latest . --typescript --app --src-dir --no-tailwind`
