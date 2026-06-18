@@ -27,3 +27,6 @@ out
 *.sw?
 
 *.code-workspace
+
+# Private notes
+support.md

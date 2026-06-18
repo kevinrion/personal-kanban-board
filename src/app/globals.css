@@ -43,6 +43,51 @@ body {
   min-height: 100svh;
 }
 
+.breadcrumb {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px 20px 0;
+  border-inline: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  text-transform: lowercase;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: '/';
+  margin-left: 8px;
+  color: var(--border);
+}
+
+.breadcrumb-item a {
+  color: var(--text-h);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-item [aria-current='page'] {
+  color: var(--text);
+}
+
 main {
   width: 1126px;
   max-width: 100%;
@@ -75,4 +120,21 @@ h1 {
 p {
   margin: 0;
   color: var(--text);
+}
+
+.button {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--text);
 }

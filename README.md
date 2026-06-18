@@ -46,6 +46,9 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
     - DONE - update macos, homebrew, xcode, docker.
     - DONE - initialise react core of the project (Vite scaffold, since migrated)
     - DONE - migrate to Next.js (App Router, TypeScript, src/app/)
+    - DONE (manual) create a sub page
+    - DONE (ai) create a button to move between pages
+    - DONE (ai) create a global breadcrumb component
 
 ---
 
