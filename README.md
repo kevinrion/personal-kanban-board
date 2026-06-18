@@ -13,21 +13,21 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 # Tech stack
 
 ## Core
-- react
-- next
+- [x] react
+- [x] next
 
 ## UI
-- Shadcn UI
-- Tailwind
-- Motion (Formerly Framer Motion)
+- [] Shadcn UI
+- [] Tailwind
+- [] Motion (Formerly Framer Motion)
 
 ## State
-- Zustand
-- Tanstack
+- [] Zustand
+- [] Tanstack
 
 ## Testing
-- vitest
-- Playwright
+- [] vitest
+- [] Playwright
 
 ---
 
