@@ -15,7 +15,6 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 ## Core
 - react
 - next
-- vite
 
 ## UI
 - Shadcn UI
@@ -44,4 +43,12 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 # Project history
 - June 18th
     - DONE - decide on tech stack.
-    - initialise react core of the project.
+    - DONE - update macos, homebrew, xcode, docker.
+    - DONE - initialise react core of the project (Vite scaffold, since migrated)
+    - DONE - migrate to Next.js (App Router, TypeScript, src/app/)
+
+---
+
+# Gotchas and tips
+- when scaffolding into an existing folder, use `.` as the project name
+    - `npx create-next-app@latest . --typescript --app --src-dir --no-tailwind`
