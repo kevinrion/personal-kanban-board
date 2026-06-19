@@ -9,7 +9,7 @@ export default function Home() {
       <p>Home</p>
       <Link
         href="/settings"
-        className={cn(buttonVariants({ variant: 'outline' }), 'mt-4')}
+        className={cn(buttonVariants({ variant: 'default' }), 'mt-4')}
       >Settings</Link>
     </main>
   )
