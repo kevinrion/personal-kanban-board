@@ -18,9 +18,11 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 
 ## UI
 - [x] Fontawesome (icons)
-- [] Shadcn UI (components)
-- [] Tailwind (css)
-- [] Motion (animation)
+- [x] Shadcn UI (components)
+- [x] Tailwind (css)
+
+NOTE:
+- [] Motion (animation) - only add this if needed, initially focus on native and tailwind animation functions. prevents needing 'use client' and merging the server-client boundary
 
 ## State
 - [] Zustand
