@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHouse } from '@fortawesome/free-solid-svg-icons'
 
 type Crumb = {
   href: string
@@ -27,6 +29,7 @@ export default function Breadcrumb() {
 
   return (
     <nav aria-label="Breadcrumb" className="breadcrumb">
+      <FontAwesomeIcon icon={faHouse} />
       <ol className="breadcrumb-list">
         {crumbs.map((crumb, index) => {
           const isLast = index === crumbs.length - 1

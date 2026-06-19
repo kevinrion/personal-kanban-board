@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Breadcrumb from '@/components/Breadcrumb'
+import '@/lib/fontawesome'
 import './globals.css'
 
 export const metadata: Metadata = {

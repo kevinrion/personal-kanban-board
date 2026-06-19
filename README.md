@@ -17,9 +17,10 @@ This project will act as a React knowledge refresher. Over the past 15 years I h
 - [x] next
 
 ## UI
-- [] Shadcn UI
-- [] Tailwind
-- [] Motion (Formerly Framer Motion)
+- [x] Fontawesome (icons)
+- [] Shadcn UI (components)
+- [] Tailwind (css)
+- [] Motion (animation)
 
 ## State
 - [] Zustand
