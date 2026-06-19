@@ -1,8 +1,17 @@
+@import './tailwind.css';
+
+/* =============================================================================
+   Standard CSS
+   Project variables, resets, and hand-written component styles.
+   ============================================================================= */
+
 :root {
+  /* Layout & typography */
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
-  --border: #e5e4e7;
+  --body-bg: #222222;
+  --border: oklch(0.922 0 0);
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
 
