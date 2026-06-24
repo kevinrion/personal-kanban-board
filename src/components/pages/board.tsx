@@ -2,6 +2,7 @@
 
 import {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -172,8 +173,6 @@ type DragState = {
   ticketId: string
   pointerId: number
   ticketElement: HTMLElement
-  offsetX: number
-  offsetY: number
   startX: number
   startY: number
   lastClientX: number
@@ -187,6 +186,8 @@ type DragState = {
 }
 
 const DRAG_ACTIVATION_DELAY_MS = 50
+const MOBILE_BOARD_MAX_WIDTH = 1279
+const DRAG_CLONE_POINTER_INSET = 5
 
 function getColumnAtPoint(x: number, y: number): ColumnLabel | null {
   const element = document.elementFromPoint(x, y)
@@ -201,15 +202,69 @@ function getColumnAtPoint(x: number, y: number): ColumnLabel | null {
   return columns.includes(column as ColumnLabel) ? (column as ColumnLabel) : null
 }
 
-function positionDragClone(
-  clone: HTMLElement,
+function getColumnDropBarTargetAtPoint(x: number, y: number): ColumnLabel | null {
+  const element = document.elementFromPoint(x, y)
+  const dropButton = element?.closest<HTMLElement>('[data-column-drop]')
+
+  if (!dropButton?.dataset.columnDrop) {
+    return null
+  }
+
+  const column = dropButton.dataset.columnDrop
+
+  return columns.includes(column as ColumnLabel) ? (column as ColumnLabel) : null
+}
+
+function getDropBarInsertPosition(
+  column: ColumnLabel,
+  draggingTicketId: string,
+): { insertIndex: number; visibleTicketIds: string[] } {
+  const ticketElements = getColumnTicketElements(column, draggingTicketId)
+  const visibleTicketIds = ticketElements
+    .map((ticketElement) => ticketElement.dataset.ticketId)
+    .filter((ticketId): ticketId is string => Boolean(ticketId))
+
+  return {
+    insertIndex: visibleTicketIds.length,
+    visibleTicketIds,
+  }
+}
+
+function resolveDragDropTarget(
   clientX: number,
   clientY: number,
-  offsetX: number,
-  offsetY: number,
-) {
-  clone.style.left = `${clientX - offsetX}px`
-  clone.style.top = `${clientY - offsetY}px`
+  ticketId: string,
+  useDropBar: boolean,
+): { column: ColumnLabel; insertIndex: number; visibleTicketIds: string[] } | null {
+  if (useDropBar) {
+    const dropBarColumn = getColumnDropBarTargetAtPoint(clientX, clientY)
+
+    if (dropBarColumn) {
+      return {
+        column: dropBarColumn,
+        ...getDropBarInsertPosition(dropBarColumn, ticketId),
+      }
+    }
+  }
+
+  const targetColumn = getColumnAtPoint(clientX, clientY)
+
+  if (!targetColumn) {
+    return null
+  }
+
+  const { insertIndex, visibleTicketIds } = getVisibleInsertIndex(
+    targetColumn,
+    clientY,
+    ticketId,
+  )
+
+  return { column: targetColumn, insertIndex, visibleTicketIds }
+}
+
+function positionDragClone(clone: HTMLElement, clientX: number, clientY: number) {
+  clone.style.left = `${clientX - DRAG_CLONE_POINTER_INSET}px`
+  clone.style.top = `${clientY - DRAG_CLONE_POINTER_INSET}px`
 }
 
 function getColumnElement(column: ColumnLabel): HTMLElement | null {
@@ -363,6 +418,24 @@ function ticketMatchesFilter(ticket: BoardTicket, filterText: string) {
   return searchableText.includes(query)
 }
 
+function useMobileBoard() {
+  const [isMobileBoard, setIsMobileBoard] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${MOBILE_BOARD_MAX_WIDTH}px)`,
+    )
+    const update = () => setIsMobileBoard(mediaQuery.matches)
+
+    update()
+    mediaQuery.addEventListener('change', update)
+
+    return () => mediaQuery.removeEventListener('change', update)
+  }, [])
+
+  return isMobileBoard
+}
+
 export default function Board() {
   const [tickets, setTickets] = useState<BoardTicket[]>(() =>
     initialTickets.map((ticket) => ({ ...ticket })),
@@ -378,6 +451,9 @@ export default function Board() {
     column: ColumnLabel
     insertIndex: number
   } | null>(null)
+  const [dragOverDropBarColumn, setDragOverDropBarColumn] = useState<ColumnLabel | null>(
+    null,
+  )
   const boardScrollRef = useRef<HTMLDivElement>(null)
   const filterTagsRef = useRef<HTMLDivElement>(null)
   const dragStateRef = useRef<DragState | null>(null)
@@ -407,26 +483,36 @@ export default function Board() {
 
   const isBoardFilterActive = isFilterInputFocused || selectedTag !== null
   const isDragging = draggingTicketId !== null
+  const isMobileBoard = useMobileBoard()
 
   const updateDropTarget = useCallback(
     (clientX: number, clientY: number, ticketId: string) => {
-      const targetColumn = getColumnAtPoint(clientX, clientY)
+      const dropBarColumn = isMobileBoard
+        ? getColumnDropBarTargetAtPoint(clientX, clientY)
+        : null
 
-      setDragOverColumn(targetColumn)
+      setDragOverDropBarColumn(dropBarColumn)
 
-      if (!targetColumn) {
+      const dropTarget = resolveDragDropTarget(
+        clientX,
+        clientY,
+        ticketId,
+        isMobileBoard,
+      )
+
+      if (!dropTarget) {
+        setDragOverColumn(null)
         setDropIndicator(null)
         return
       }
 
-      const { insertIndex } = getVisibleInsertIndex(targetColumn, clientY, ticketId)
-
+      setDragOverColumn(dropBarColumn ? null : dropTarget.column)
       setDropIndicator({
-        column: targetColumn,
-        insertIndex,
+        column: dropTarget.column,
+        insertIndex: dropTarget.insertIndex,
       })
     },
-    [],
+    [isMobileBoard],
   )
 
   const activateDragIfReady = useCallback(() => {
@@ -448,13 +534,7 @@ export default function Board() {
     clone.setAttribute('aria-hidden', 'true')
 
     document.body.appendChild(clone)
-    positionDragClone(
-      clone,
-      dragState.lastClientX,
-      dragState.lastClientY,
-      dragState.offsetX,
-      dragState.offsetY,
-    )
+    positionDragClone(clone, dragState.lastClientX, dragState.lastClientY)
 
     dragState.clone = clone
     dragState.isActive = true
@@ -479,6 +559,7 @@ export default function Board() {
     dragStateRef.current = null
     setDraggingTicketId(null)
     setDragOverColumn(null)
+    setDragOverDropBarColumn(null)
     setDropIndicator(null)
     document.body.style.userSelect = ''
   }, [])
@@ -486,28 +567,27 @@ export default function Board() {
   const finishDrag = useCallback(
     (clientX: number, clientY: number, ticketId: string, wasActive: boolean) => {
       if (wasActive) {
-        const targetColumn = getColumnAtPoint(clientX, clientY)
+        const dropTarget = resolveDragDropTarget(
+          clientX,
+          clientY,
+          ticketId,
+          isMobileBoard,
+        )
 
-        if (targetColumn) {
-          const { insertIndex, visibleTicketIds } = getVisibleInsertIndex(
-            targetColumn,
-            clientY,
-            ticketId,
-          )
-
+        if (dropTarget) {
           setTickets((currentTickets) => {
             const columnInsertIndex = mapVisibleInsertToColumnIndex(
               currentTickets,
-              targetColumn,
+              dropTarget.column,
               ticketId,
-              insertIndex,
-              visibleTicketIds,
+              dropTarget.insertIndex,
+              dropTarget.visibleTicketIds,
             )
 
             return insertTicketAtColumnIndex(
               currentTickets,
               ticketId,
-              targetColumn,
+              dropTarget.column,
               columnInsertIndex,
             )
           })
@@ -521,7 +601,7 @@ export default function Board() {
 
       clearDragState()
     },
-    [clearDragState],
+    [clearDragState, isMobileBoard],
   )
 
   const handleTicketPointerDown = useCallback(
@@ -531,14 +611,11 @@ export default function Board() {
       }
 
       const ticketElement = event.currentTarget
-      const rect = ticketElement.getBoundingClientRect()
 
       dragStateRef.current = {
         ticketId,
         pointerId: event.pointerId,
         ticketElement,
-        offsetX: event.clientX - rect.left,
-        offsetY: event.clientY - rect.top,
         startX: event.clientX,
         startY: event.clientY,
         lastClientX: event.clientX,
@@ -592,13 +669,7 @@ export default function Board() {
         return
       }
 
-      positionDragClone(
-        dragState.clone,
-        event.clientX,
-        event.clientY,
-        dragState.offsetX,
-        dragState.offsetY,
-      )
+      positionDragClone(dragState.clone, event.clientX, event.clientY)
       updateDropTarget(event.clientX, event.clientY, dragState.ticketId)
     },
     [activateDragIfReady, updateDropTarget],
@@ -663,7 +734,7 @@ export default function Board() {
       <div className="board-filter">
         <Input
           type="search"
-          className="board-filter-input mr-3"
+          className="board-filter-input"
           value={filterText}
           onChange={(event) => setFilterText(event.target.value)}
           onFocus={() => setIsFilterInputFocused(true)}
@@ -698,6 +769,25 @@ export default function Board() {
           </div>
         </div>
       </div>
+
+      {isDragging && isMobileBoard ? (
+        <div className="board-column-drop-bar" aria-hidden="true">
+          {columns.map((label) => (
+            <button
+              key={label}
+              type="button"
+              className={cn(
+                'board-column-drop-btn',
+                dragOverDropBarColumn === label && 'board-column-drop-btn--over',
+              )}
+              data-column-drop={label}
+              tabIndex={-1}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <div className="board-body">
         <div className="board-scroll-wrap">
