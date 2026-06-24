@@ -4,9 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-regular-svg-icons'
-import {
-  faQuestion,
-} from '@fortawesome/free-solid-svg-icons'
 import { Columns3, Settings } from 'lucide-react'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import type { LucideIcon } from 'lucide-react'
@@ -24,37 +21,11 @@ type NavItem = {
   LucideIcon?: LucideIcon
 }
 
-const mainNavItems: NavItem[] = [
+const navItems: NavItem[] = [
   { href: '/', label: 'Home', icon: faHouse },
   { href: '/board', label: 'Board', LucideIcon: Columns3 },
   { href: '/settings', label: 'Settings', LucideIcon: Settings },
 ]
-
-const fillerNavLabels = [
-  'Lorem',
-  'Ipsum',
-  'Dolor',
-  'Amet',
-  'Conset',
-  'Adipisc',
-  'Elit',
-  'Tempor',
-  'Incidid',
-  'Labore',
-  'Dolore',
-  'Magna',
-  'Aliqua',
-  'Enim',
-  'Veniam',
-] as const
-
-const fillerNavItems: NavItem[] = fillerNavLabels.map((label, index) => ({
-  href: `/test-${index + 1}`,
-  label,
-  icon: faQuestion,
-}))
-
-const navItems = [...mainNavItems, ...fillerNavItems]
 
 function SidebarNavIcon({ icon, LucideIcon }: Pick<NavItem, 'icon' | 'LucideIcon'>) {
   if (LucideIcon) {
@@ -67,10 +38,6 @@ function SidebarNavIcon({ icon, LucideIcon }: Pick<NavItem, 'icon' | 'LucideIcon
 function isNavItemActive(pathname: string, href: string) {
   if (href === '/') {
     return pathname === '/'
-  }
-
-  if (href.startsWith('/test-')) {
-    return pathname === href
   }
 
   return pathname.startsWith(href)

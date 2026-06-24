@@ -17,7 +17,7 @@ type TicketDetailProps = {
 
 export default function TicketDetail({ ticket, onClose }: TicketDetailProps) {
   return (
-    <aside className="ticket-detail" aria-label={`Ticket detail for ${ticket.id}`}>
+    <aside className="ticket-detail ml-1" aria-label={`Ticket detail for ${ticket.id}`}>
       <div className="ticket-detail-header">
         <h2 className="ticket-detail-title">{ticket.id}</h2>
         <button

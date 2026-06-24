@@ -43,21 +43,10 @@ export default function TopBar() {
         </button>
       </div>
 
-      <div className="topbar-center">
-        <input
-          type="search"
-          className="topbar-search"
-          placeholder="Search..."
-          aria-label="Search"
-        />
-        <button type="button" className="topbar-create-btn">
-          Create
-        </button>
-      </div>
-
       <div className="topbar-right">
-        <button type="button" className="topbar-round-btn" aria-label="Action 4" />
-        <button type="button" className="topbar-round-btn" aria-label="Action 5" />
+        <button type="button" className="topbar-user-btn" aria-label="User KR">
+          KR
+        </button>
       </div>
     </header>
   )

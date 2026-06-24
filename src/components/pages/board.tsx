@@ -3,7 +3,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Ticket from '@/components/board/ticket'
 import TicketDetail from '@/components/board/ticket-detail'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useScrollFadeEdges } from '@/hooks/use-scroll-fade-edges'
 import { cn } from '@/lib/utils'
@@ -151,14 +150,6 @@ const dummyTickets = [
 
 const tags = [...new Set(dummyTickets.map((ticket) => ticket.tag))].sort()
 
-const testButtons = [
-  'test_1',
-  'test_2',
-  'test_3',
-  'test_4',
-  'test_5',
-] as const
-
 type BoardTicket = (typeof dummyTickets)[number]
 
 function ticketMatchesFilter(ticket: BoardTicket, filterText: string) {
@@ -185,26 +176,31 @@ function ticketMatchesFilter(ticket: BoardTicket, filterText: string) {
 
 export default function Board() {
   const [filterText, setFilterText] = useState('')
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
+  const [isFilterInputFocused, setIsFilterInputFocused] = useState(false)
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
   const [columnsWidth, setColumnsWidth] = useState<number | null>(null)
   const boardScrollRef = useRef<HTMLDivElement>(null)
   const filterTagsRef = useRef<HTMLDivElement>(null)
 
   const tagScrollEdges = useScrollFadeEdges(filterTagsRef)
-  const columnScrollEdges = useScrollFadeEdges(
-    boardScrollRef,
-    Boolean(selectedTicketId),
-  )
 
   const visibleTickets = useMemo(
-    () => dummyTickets.filter((ticket) => ticketMatchesFilter(ticket, filterText)),
-    [filterText],
+    () =>
+      dummyTickets.filter(
+        (ticket) =>
+          ticketMatchesFilter(ticket, filterText) &&
+          (!selectedTag || ticket.tag === selectedTag),
+      ),
+    [filterText, selectedTag],
   )
 
   const selectedTicket = useMemo(
     () => dummyTickets.find((ticket) => ticket.id === selectedTicketId) ?? null,
     [selectedTicketId],
   )
+
+  const isBoardFilterActive = isFilterInputFocused || selectedTag !== null
 
   useLayoutEffect(() => {
     const boardScroll = boardScrollRef.current
@@ -232,9 +228,11 @@ export default function Board() {
       <div className="board-filter">
         <Input
           type="search"
-          className="board-filter-input"
+          className="board-filter-input mr-3"
           value={filterText}
           onChange={(event) => setFilterText(event.target.value)}
+          onFocus={() => setIsFilterInputFocused(true)}
+          onBlur={() => setIsFilterInputFocused(false)}
           placeholder="Filter tickets..."
           aria-label="Filter tickets"
         />
@@ -247,32 +245,27 @@ export default function Board() {
         >
           <div className="board-filter-tags" ref={filterTagsRef}>
             {tags.map((tag) => (
-              <Button key={tag} type="button" variant="outline" size="sm">
+              <button
+                key={tag}
+                type="button"
+                className={cn(
+                  'board-filter-tag-btn',
+                  selectedTag === tag && 'board-filter-tag-btn-active',
+                )}
+                aria-pressed={selectedTag === tag}
+                onClick={() =>
+                  setSelectedTag((current) => (current === tag ? null : tag))
+                }
+              >
                 {tag}
-              </Button>
-            ))}
-            {testButtons.map((label) => (
-              <Button key={label} type="button" variant="outline" size="sm">
-                {label}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
       </div>
 
       <div className="board-body">
-        <div
-          className={cn(
-            'board-scroll-wrap',
-            selectedTicket && 'scroll-fade-edges',
-            selectedTicket &&
-              columnScrollEdges.left &&
-              'scroll-fade-edges--overflow-left',
-            selectedTicket &&
-              columnScrollEdges.right &&
-              'scroll-fade-edges--overflow-right',
-          )}
-        >
+        <div className="board-scroll-wrap">
           <div className="board-scroll" ref={boardScrollRef}>
             <div
               className={cn('board-columns', selectedTicket && 'board-columns--frozen')}
@@ -288,7 +281,13 @@ export default function Board() {
                 )
 
                 return (
-                  <section key={label} className="board-column">
+                  <section
+                    key={label}
+                    className={cn(
+                      'board-column',
+                      isBoardFilterActive && 'board-column--filter-active',
+                    )}
+                  >
                     <h2 className="board-column-title">
                       <span>{label}</span>
                       <span className="board-column-count">{columnTickets.length}</span>

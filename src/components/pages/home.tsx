@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <>
       <h1>Home</h1>
-      <p>Please select a page from the sidebar</p>
+      <p>This is a portfolio project built using React.</p>
     </>
   )
 }

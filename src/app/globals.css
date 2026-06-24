@@ -13,9 +13,12 @@
   --surface-card: #ffffff;
   --surface-hover: #f0f0f0;
 
-  /* Accent — spring green highlight */
-  --accent: #01ff95;
-  --accent-foreground: #121212;
+  /* Accent — blue highlight */
+  --accent: #5182ef;
+  --accent-foreground: #ffffff;
+
+  /* Ticket selection — midway between red and pink */
+  --ticket-selected: #ff6066;
 
   /* Typography */
   --text-primary: #121212;
@@ -109,7 +112,7 @@ body {
   left: 0;
   background: linear-gradient(
     to right,
-    var(--scroll-fade-color, #2563eb),
+    var(--scroll-fade-color, var(--accent)),
     transparent
   );
 }
@@ -118,7 +121,7 @@ body {
   right: 0;
   background: linear-gradient(
     to left,
-    var(--scroll-fade-color, #2563eb),
+    var(--scroll-fade-color, var(--accent)),
     transparent
   );
 }
@@ -173,14 +176,6 @@ body {
   justify-content: flex-end;
 }
 
-.topbar-center {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 2;
-  max-width: 420px;
-}
-
 .topbar-square-btn {
   display: inline-flex;
   align-items: center;
@@ -224,61 +219,6 @@ body {
   border-color: var(--border-default);
   background: var(--surface-card);
   color: var(--text-primary);
-}
-
-.topbar-search {
-  flex: 1;
-  min-width: 0;
-  height: 32px;
-  padding: 0 12px;
-  border: 1px solid var(--border-default);
-  border-radius: 8px;
-  background: var(--surface-card);
-  color: var(--text-primary);
-  font: inherit;
-  outline: none;
-}
-
-.topbar-search::placeholder {
-  color: var(--text-muted);
-}
-
-.topbar-search:focus {
-  border-color: var(--accent);
-}
-
-.topbar-create-btn {
-  height: 32px;
-  padding: 0 14px;
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  background: var(--accent);
-  color: var(--accent-foreground);
-  font: inherit;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: opacity 0.15s;
-}
-
-.topbar-create-btn:hover {
-  opacity: 0.85;
-}
-
-.topbar-round-btn {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid var(--border-default);
-  border-radius: 50%;
-  background: var(--surface-card);
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.topbar-round-btn:hover {
-  border-color: var(--accent);
-  background: var(--surface-hover);
 }
 
 .breadcrumb {
@@ -364,7 +304,7 @@ body {
   color: var(--text-secondary);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.15s;
 }
 
 .sidebar-link svg {
@@ -374,12 +314,10 @@ body {
 
 .sidebar-link:hover {
   color: var(--accent);
-  background: var(--surface-hover);
 }
 
 .sidebar-link-active {
   color: var(--accent);
-  background: var(--surface-hover);
 }
 
 .sidebar-footer {
@@ -485,7 +423,7 @@ body {
   flex-shrink: 0;
   width: 100%;
   min-width: 0;
-  padding-bottom: 16px;
+  padding: 0 0 20px 0;
 }
 
 .board-filter-input {
@@ -510,6 +448,34 @@ body {
 
 .board-filter-tags > * {
   flex-shrink: 0;
+}
+
+.board-filter-tag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background: var(--surface-card);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.board-filter-tag-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.board-filter-tag-btn-active {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  color: var(--accent);
 }
 
 .board-scroll-wrap {
@@ -563,6 +529,12 @@ p {
   padding: 0;
   min-height: 480px;
   overflow: hidden;
+  border: 3px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.board-column--filter-active {
+  border-color: var(--accent);
 }
 
 .board-column-title {
@@ -618,7 +590,7 @@ p {
 }
 
 .ticket--selected {
-  border-color: var(--accent);
+  border-color: var(--ticket-selected);
 }
 
 .ticket-detail {
@@ -628,7 +600,7 @@ p {
   width: 256px;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
+  border: 2px solid var(--ticket-selected);
   border-right: none;
   border-radius: 12px 0 0 12px;
   background: var(--surface-section);
@@ -745,6 +717,23 @@ p {
   color: #ffffff;
   font-size: 0.65rem;
   font-weight: 600;
+}
+
+.topbar-user-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  background: #1e7b1e;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.845rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .ticket-title {
