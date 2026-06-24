@@ -544,6 +544,18 @@ p {
   border-color: var(--accent);
 }
 
+.board-column--drag-active {
+  border: 3px dotted red;
+}
+
+.board-column--drag-over {
+  background: #fa8072;
+}
+
+.board-column--drag-over .board-column-title {
+  background: #fa8072;
+}
+
 .board-column-title {
   position: sticky;
   top: 0;
@@ -582,6 +594,13 @@ p {
   padding: 0 16px 16px;
 }
 
+.board-drop-indicator {
+  flex-shrink: 0;
+  height: 10px;
+  border-radius: 4px;
+  background: #c62828;
+}
+
 .ticket {
   background: #f4f4f4;
   border-radius: 8px;
@@ -590,6 +609,8 @@ p {
   cursor: pointer;
   border: 2px solid transparent;
   transition: border-color 0.15s, box-shadow 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .ticket:hover {
@@ -598,6 +619,20 @@ p {
 
 .ticket--selected {
   border-color: var(--ticket-selected);
+}
+
+.ticket--dragging {
+  opacity: 0.6;
+}
+
+.ticket-drag-clone {
+  position: fixed;
+  z-index: 1000;
+  margin: 0;
+  opacity: 0.75;
+  pointer-events: none;
+  cursor: grabbing;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .ticket-detail {

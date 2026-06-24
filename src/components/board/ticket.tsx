@@ -1,3 +1,4 @@
+import type { PointerEvent } from 'react'
 import { cn } from '@/lib/utils'
 
 type TicketProps = {
@@ -7,7 +8,12 @@ type TicketProps = {
   tag: string
   assignee: string
   isSelected?: boolean
+  isDragging?: boolean
   onSelect?: () => void
+  onPointerDown?: (event: PointerEvent<HTMLElement>) => void
+  onPointerMove?: (event: PointerEvent<HTMLElement>) => void
+  onPointerUp?: (event: PointerEvent<HTMLElement>) => void
+  onPointerCancel?: (event: PointerEvent<HTMLElement>) => void
 }
 
 export default function Ticket({
@@ -17,11 +23,24 @@ export default function Ticket({
   tag,
   assignee,
   isSelected = false,
+  isDragging = false,
   onSelect,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerCancel,
 }: TicketProps) {
   return (
     <article
-      className={cn('ticket', isSelected && 'ticket--selected')}
+      className={cn(
+        'ticket',
+        isSelected && 'ticket--selected',
+        isDragging && 'ticket--dragging',
+      )}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
       onClick={onSelect}
       onKeyDown={(event) => {
         if (onSelect && (event.key === 'Enter' || event.key === ' ')) {
@@ -32,6 +51,7 @@ export default function Ticket({
       role={onSelect ? 'button' : undefined}
       tabIndex={onSelect ? 0 : undefined}
       aria-pressed={onSelect ? isSelected : undefined}
+      data-ticket-id={id}
     >
       <div className="ticket-header">
         <span className="ticket-id">{id}</span>
