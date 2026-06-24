@@ -6,6 +6,7 @@ const THEME_STORAGE_KEY = 'theme-dark'
 
 type ThemeContextValue = {
   isDarkMode: boolean
+  setDarkMode: (value: boolean) => void
   toggleDarkMode: () => void
 }
 
@@ -47,6 +48,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <ThemeContext.Provider
       value={{
         isDarkMode,
+        setDarkMode: setIsDarkMode,
         toggleDarkMode: () => setIsDarkMode((current) => !current),
       }}
     >
