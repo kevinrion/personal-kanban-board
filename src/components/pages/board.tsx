@@ -14,6 +14,7 @@ import Ticket from '@/components/board/ticket'
 import TicketDetail from '@/components/board/ticket-detail'
 import { Input } from '@/components/ui/input'
 import { useScrollFadeEdges } from '@/hooks/use-scroll-fade-edges'
+import { loadTicketsFromStorage, saveTicketsToStorage } from '@/lib/ticket-storage'
 import { cn } from '@/lib/utils'
 
 const columns = [
@@ -437,9 +438,13 @@ function useMobileBoard() {
 }
 
 export default function Board() {
-  const [tickets, setTickets] = useState<BoardTicket[]>(() =>
-    initialTickets.map((ticket) => ({ ...ticket })),
+  const defaultTickets = useMemo(
+    () => initialTickets.map((ticket) => ({ ...ticket })),
+    [],
   )
+  const [tickets, setTickets] = useState<BoardTicket[]>(defaultTickets)
+  const [hasLoadedTicketsFromStorage, setHasLoadedTicketsFromStorage] =
+    useState(false)
   const [filterText, setFilterText] = useState('')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [isFilterInputFocused, setIsFilterInputFocused] = useState(false)
@@ -458,6 +463,19 @@ export default function Board() {
   const filterTagsRef = useRef<HTMLDivElement>(null)
   const dragStateRef = useRef<DragState | null>(null)
   const suppressClickRef = useRef(false)
+
+  useEffect(() => {
+    setTickets(loadTicketsFromStorage(defaultTickets))
+    setHasLoadedTicketsFromStorage(true)
+  }, [defaultTickets])
+
+  useEffect(() => {
+    if (!hasLoadedTicketsFromStorage) {
+      return
+    }
+
+    saveTicketsToStorage(tickets)
+  }, [tickets, hasLoadedTicketsFromStorage])
 
   const tags = useMemo(
     () => [...new Set(tickets.map((ticket) => ticket.tag))].sort(),
