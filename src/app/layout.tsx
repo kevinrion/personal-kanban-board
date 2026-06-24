@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import Breadcrumb from '@/components/Breadcrumb'
+import AppShell from '@/components/layout/AppShell'
+import { SidebarProvider } from '@/components/layout/SidebarProvider'
+import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import '@/lib/fontawesome'
 import './globals.css'
 import { Geist } from "next/font/google";
@@ -18,10 +20,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn('dark font-sans', geist.variable)}>
+    <html lang="en" className={cn('font-sans', geist.variable)} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=localStorage.getItem('theme-dark');document.documentElement.classList.toggle('dark',d!=='false')}catch(e){document.documentElement.classList.add('dark')}})();`,
+          }}
+        />
+      </head>
       <body>
-        <Breadcrumb />
-        {children}
+        <ThemeProvider>
+          <SidebarProvider>
+            <AppShell>{children}</AppShell>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
