@@ -47,7 +47,7 @@ function useMobileSidebar() {
   const [isMobileSidebar, setIsMobileSidebar] = useState(false)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 1279px)')
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
     const update = () => setIsMobileSidebar(mediaQuery.matches)
 
     update()

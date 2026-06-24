@@ -70,7 +70,7 @@
   color-scheme: dark;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   :root {
     font-size: 16px;
   }
@@ -161,8 +161,8 @@ body {
     'main';
 }
 
-/* Tailwind xl */
-@media (min-width: 1280px) {
+/* desktop: min-width 769px */
+@media (min-width: 769px) {
   .app {
     grid-template-columns: auto 1fr;
     grid-template-rows: auto 1fr;
@@ -311,8 +311,8 @@ body {
   padding: 16px 20px 12px;
 }
 
-/* Tailwind xl */
-@media (min-width: 1280px) {
+/* desktop: min-width 769px */
+@media (min-width: 769px) {
   .sidebar {
     width: max-content;
     height: 100%;
@@ -333,8 +333,8 @@ body {
   list-style: none;
 }
 
-/* Tailwind xl: mobile horizontal sidebar */
-@media (max-width: 1279px) {
+/* mobile: max-width 768px — horizontal sidebar */
+@media (max-width: 768px) {
   .sidebar {
     flex-direction: row;
     align-items: center;
@@ -448,8 +448,8 @@ body {
   align-items: center;
 }
 
-/* Tailwind xl: hide sidebar footer on mobile */
-@media (max-width: 1279px) {
+/* mobile: max-width 768px — hide sidebar footer */
+@media (max-width: 768px) {
   .sidebar-footer {
     display: none;
   }
@@ -566,8 +566,8 @@ body {
   color: var(--accent);
 }
 
-/* Tailwind xl: stack filter input above full-width tags */
-@media (max-width: 1279px) {
+/* mobile: max-width 768px — stack filter input above full-width tags */
+@media (max-width: 768px) {
   .board-filter {
     flex-direction: column;
     align-items: stretch;
@@ -589,8 +589,8 @@ body {
   }
 }
 
-/* Tailwind xl: row layout on desktop */
-@media (min-width: 1280px) {
+/* desktop: min-width 769px — row layout */
+@media (min-width: 769px) {
   .board-filter {
     flex-direction: row;
     align-items: center;
@@ -616,8 +616,8 @@ body {
   padding: 0 8px 8px;
 }
 
-/* Tailwind xl: drop bar is mobile-only */
-@media (min-width: 1280px) {
+/* desktop: min-width 769px — drop bar is mobile-only */
+@media (min-width: 769px) {
   .board-column-drop-bar {
     display: none;
   }
@@ -668,7 +668,7 @@ h1 {
   margin: 0 0 16px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   h1 {
     font-size: 36px;
   }
@@ -686,8 +686,8 @@ p {
   width: 100%;
 }
 
-/* Tailwind xl: wider column minimum on desktop */
-@media (min-width: 1280px) {
+/* desktop: min-width 769px — wider column minimum */
+@media (min-width: 769px) {
   .board-columns {
     grid-template-columns: repeat(5, minmax(220px, 1fr));
   }
@@ -697,8 +697,8 @@ p {
   }
 }
 
-/* Tailwind xl: narrower columns and smaller ticket text on mobile */
-@media (max-width: 1279px) {
+/* mobile: max-width 768px — narrower columns and smaller ticket text */
+@media (max-width: 768px) {
   .board-column {
     min-width: 190px;
   }

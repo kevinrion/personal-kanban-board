@@ -186,7 +186,7 @@ type DragState = {
 }
 
 const DRAG_ACTIVATION_DELAY_MS = 50
-const MOBILE_BOARD_MAX_WIDTH = 1279
+const MOBILE_BOARD_MAX_WIDTH = 768
 const DRAG_CLONE_POINTER_INSET = 5
 
 function getColumnAtPoint(x: number, y: number): ColumnLabel | null {
