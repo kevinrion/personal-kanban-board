@@ -1,0 +1,20 @@
+---
+description: Confirm changes before implementing; ask when approach is ambiguous
+alwaysApply: true
+---
+
+# Confirm Before Implementing
+
+Before making code changes, file edits, or running destructive commands:
+
+1. **Propose first** — Describe what you plan to change and why.
+2. **Wait for confirmation** — Do not implement until the user approves the plan.
+3. **Small exceptions** — Trivial, read-only investigation (searching code, reading files, running safe diagnostics) does not require confirmation.
+
+## Resolve Ambiguity
+
+When multiple valid approaches exist, or requirements are unclear:
+
+1. **Present options** — Briefly describe each viable approach and trade-offs.
+2. **Ask the user** — Let them choose before proceeding.
+3. **Do not guess** — Do not pick an approach silently when the choice meaningfully affects behavior, architecture, or UX.
