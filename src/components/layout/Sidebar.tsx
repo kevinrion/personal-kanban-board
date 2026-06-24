@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-regular-svg-icons'
 import { Columns3 } from 'lucide-react'
@@ -42,9 +43,26 @@ function isNavItemActive(pathname: string, href: string) {
   return pathname.startsWith(href)
 }
 
+function useMobileSidebar() {
+  const [isMobileSidebar, setIsMobileSidebar] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1279px)')
+    const update = () => setIsMobileSidebar(mediaQuery.matches)
+
+    update()
+    mediaQuery.addEventListener('change', update)
+
+    return () => mediaQuery.removeEventListener('change', update)
+  }, [])
+
+  return isMobileSidebar
+}
+
 export default function Sidebar() {
   const pathname = usePathname()
   const { showLabels, toggleLabels } = useSidebar()
+  const isMobileSidebar = useMobileSidebar()
 
   return (
     <aside
@@ -65,8 +83,10 @@ export default function Sidebar() {
                       isActive ? 'sidebar-link sidebar-link-active' : 'sidebar-link'
                     }
                     aria-current={isActive ? 'page' : undefined}
-                    aria-label={!showLabels ? label : undefined}
-                    title={!showLabels ? label : undefined}
+                    aria-label={
+                      !showLabels || isMobileSidebar ? label : undefined
+                    }
+                    title={!showLabels || isMobileSidebar ? label : undefined}
                   >
                     <SidebarNavIcon icon={icon} LucideIcon={LucideIcon} />
                     {showLabels ? <span>{label}</span> : null}
