@@ -7,6 +7,7 @@ import {
   SidebarOpenIcon,
 } from '@/components/layout/sidebar-toggle-icons'
 import { useTheme } from '@/components/layout/ThemeProvider'
+import UserAccount from '@/components/layout/UserAccount'
 import { cn } from '@/lib/utils'
 
 export default function TopBar() {
@@ -44,9 +45,7 @@ export default function TopBar() {
       </div>
 
       <div className="topbar-right">
-        <button type="button" className="topbar-user-btn" aria-label="User KR">
-          KR
-        </button>
+        <UserAccount />
       </div>
     </header>
   )

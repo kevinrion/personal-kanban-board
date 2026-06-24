@@ -719,7 +719,7 @@ p {
   font-weight: 600;
 }
 
-.topbar-user-btn {
+.user-account {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -734,6 +734,43 @@ p {
   font-size: 0.845rem;
   font-weight: 700;
   cursor: pointer;
+}
+
+.user-account-wrap {
+  position: relative;
+}
+
+.user-account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  min-width: 140px;
+  padding: 4px;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background: var(--surface-card);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.user-account-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.user-account-menu-item:hover {
+  background: var(--surface-hover);
+  color: var(--accent);
 }
 
 .ticket-title {
