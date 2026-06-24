@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-regular-svg-icons'
-import { Columns3, Settings } from 'lucide-react'
+import { Columns3 } from 'lucide-react'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import type { LucideIcon } from 'lucide-react'
 import { useSidebar } from '@/components/layout/SidebarProvider'
@@ -24,7 +24,6 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: '/', label: 'Home', icon: faHouse },
   { href: '/board', label: 'Board', LucideIcon: Columns3 },
-  { href: '/settings', label: 'Settings', LucideIcon: Settings },
 ]
 
 function SidebarNavIcon({ icon, LucideIcon }: Pick<NavItem, 'icon' | 'LucideIcon'>) {
